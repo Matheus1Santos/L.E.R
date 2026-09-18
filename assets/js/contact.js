@@ -15,36 +15,30 @@
   }
   document.querySelectorAll('.php-email-form').forEach(function (form) {
     const en = document.documentElement.lang.startsWith('en');
-    const name = form.querySelector('[name="name"]');
-    const email = form.querySelector('[name="email"]');
     const phone = form.querySelector('[name="phone"]');
-    const rating = form.querySelector('[name="rating"]');
     const error = form.querySelector('.error-message');
-    const success = form.querySelector('.sent-message');
     error.setAttribute('role', 'alert');
-    success.setAttribute('role', 'status');
-    const phoneError = en ? 'Enter a Brazilian phone number with a valid area code: 8 digits for a landline (starting with 2–5), or 9 digits for a mobile (starting with 9).' : 'Informe um telefone brasileiro com DDD válido: fixo com 8 dígitos (iniciando de 2 a 5) ou celular com 9 dígitos (iniciando com 9).';
-    phone.addEventListener('input', function () { phone.setCustomValidity(''); });
-    form.addEventListener('input', function () {
+    phone.addEventListener('input', function () {
+      phone.setCustomValidity('');
+      phone.removeAttribute('aria-invalid');
       error.classList.remove('d-block');
-      success.classList.remove('d-block');
+    });
+    phone.addEventListener('blur', function () {
+      const invalid = phone.value.trim() !== '' && !validPhone(phone.value);
+      const message = en ? 'Enter a valid Brazilian phone number with area code.' : 'Informe um telefone brasileiro com DDD válido.';
+      phone.setCustomValidity(invalid ? message : '');
+      phone.setAttribute('aria-invalid', String(invalid));
+      error.textContent = invalid ? message : '';
+      error.classList.toggle('d-block', invalid);
     });
     form.addEventListener('submit', function (event) {
       event.preventDefault();
-      error.classList.remove('d-block');
-      success.classList.remove('d-block');
-      function reject(field, message) {
-        error.textContent = message;
-        error.classList.add('d-block');
-        field.focus();
-      }
-      if (name.value.trim().length < 2) return reject(name, en ? 'Please enter your full name.' : 'Por favor, informe seu nome completo.');
-      if (!email.validity.valid || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) return reject(email, en ? 'Please enter a valid email address.' : 'Por favor, informe um e-mail válido.');
-      phone.setCustomValidity(validPhone(phone.value) ? '' : phoneError);
-      if (!phone.validity.valid) return reject(phone, phoneError);
-      if (!/^[0-5]$/.test(rating.value)) return reject(rating, en ? 'Please select a rating from 0 to 5.' : 'Por favor, selecione uma nota de 0 a 5.');
-      success.textContent = en ? 'Validation complete. This demonstration does not send or save your data.' : 'Validação concluída. Esta demonstração não envia nem armazena seus dados.';
-      success.classList.add('d-block');
+      const name = form.querySelector('[name="name"]');
+      name.setCustomValidity(name.value.trim().length < 2 ? (en ? 'Enter your name.' : 'Informe seu nome.') : '');
+      phone.setCustomValidity(validPhone(phone.value) ? '' : (en ? 'Enter a valid Brazilian phone number with area code.' : 'Informe um telefone brasileiro com DDD válido.'));
+      if (!form.reportValidity()) return;
+      error.textContent = en ? 'Sending is not available yet. No data was sent.' : 'O envio ainda não está disponível. Nenhum dado foi enviado.';
+      error.classList.add('d-block');
     });
   });
 })();
