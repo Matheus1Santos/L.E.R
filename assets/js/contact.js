@@ -5,7 +5,7 @@
     const raw = value.trim();
     if (!/^[\d\s-]+$/.test(raw)) return false;
     const number = raw.replace(/\D/g, '');
-    return /^(?:[2-5]\d{7}|9\d{8})$/.test(number) &&
+    return /^\d{8,9}$/.test(number) &&
       !/^(\d)\1+$/.test(number) && !/^(\d)\1{7}$/.test(number.slice(-8));
   }
   document.querySelectorAll('.php-email-form').forEach(function (form) {
