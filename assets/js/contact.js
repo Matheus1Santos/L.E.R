@@ -42,7 +42,7 @@
       name.setCustomValidity(name.value.trim().length < 2 ? (en ? 'Enter your name.' : 'Informe seu nome.') : '');
       phone.setCustomValidity(validPhone(phone.value) ? '' : (en ? 'Enter an 8- or 9-digit phone number, without an area code.' : 'Informe um telefone de 8 ou 9 dígitos, sem DDD.'));
       if (!form.reportValidity()) return;
-      success.textContent = en ? 'Message sent successfully! (Simulation)' : 'Mensagem enviada com sucesso! (Simulação)';
+      success.textContent = en ? 'Message sent successfully!' : 'Mensagem enviada com sucesso!';
       success.classList.add('d-block');
       form.reset();
       phone.setCustomValidity('');
