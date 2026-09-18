@@ -2269,17 +2269,17 @@ textarea.form-control,
   background: color-mix(in srgb, var(--accent-color), transparent 90%);
   border-color: color-mix(in srgb, var(--accent-color), transparent 70%);
 }
-/* Rodapé no fim da tela nas páginas da equipe, sem cobrir o conteúdo. */
-body.page-creditos {
+/* Rodapé no fim da tela em todas as páginas, sem cobrir o conteúdo. */
+body {
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
-body.page-creditos > .header,
-body.page-creditos > .footer {
+body > .header,
+body > .footer {
   flex-shrink: 0;
 }
-body.page-creditos > main {
+body > main {
   flex: 1 0 auto;
 }
